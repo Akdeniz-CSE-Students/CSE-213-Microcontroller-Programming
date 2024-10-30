@@ -1,0 +1,77 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+Lab-01_-.com -- emu8086 assembler version: 4.07  
+ 
+[ 22.10.2024  --  11:36:45 ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       name "Lab-01 -- Yahya Efe Kurucay - 22.10.2024"
+[   2]        :                                       
+[   3]        :                                       ;db--> define byte ||| dw--> define word
+[   4]        :                                       
+[   5]        :                                       org 100h            ; Program 100h adresinden baslar
+[   6]        :                                       
+[   7]    0100: BF 00 20                              mov di, 2000h       ; di> destination index olarak 2000h ayarlanir
+[   8]    0103: 8A 0E 4C 01                           mov cl, M           ; cl register'ina M degeri yuklenir
+[   9]    0107: B5 00                                 mov ch, 0           ; ch register'i sifirlanir (kullanilmayacak)
+[  10]    0109: BB 00 00                              mov bx, 0           ; bx toplami tutacak ve basta sifir olarak ayarlanir
+[  11]    010C: BA 01 00                              mov dx, 1           ; dx register'ina 1 degeri yuklenir
+[  12]        :                                       
+[  13]    010F:                                       loop1:              ; Dongu baslangici
+[  14]    010F: 89 15                                 mov [di], dx        ; Bellege (di'nin isaret ettigi adres) dx'in degeri yazilir
+[  15]    0111: 03 1D                                 add bx, [di]        ; bx register'ina, di'nin gosterdigi adresteki deger eklenir
+[  16]    0113: 47                                    inc di              ; di'yi bir arttir (bir sonraki bellege gec)
+[  17]    0114: 42                                    inc dx              ; dx'i bir arttir
+[  18]    0115: E2 F8                                 loop loop1          ; cl sifir olana kadar donguyu tekrar et
+[  19]        :                                       
+[  20]    0117: 4A                                    dec dx              ; dx'i bir azalt
+[  21]    0118: 03 D2                                 add dx, dx          ; dx'i kendisiyle topla (carpma etkisi)
+[  22]    011A: 8A 0E 4B 01                           mov cl, N           ; cl register'ina N yuklenir
+[  23]    011E: 2A 0E 4C 01                           sub cl, M           ; cl register'indan M cikarilir
+[  24]        :                                       
+[  25]    0122:                                       loop2:
+[  26]    0122: 89 15                                 mov [di], dx        ; Bellekteki adrese dx'i yaz
+[  27]    0124: 03 1D                                 add bx, [di]        ; bx register'ina degeri ekle
+[  28]    0126: 42                                    inc dx              ; dx'i bir arttir
+[  29]    0127: 47                                    inc di              ; di'yi bir arttir (adres de ilerlesin)
+[  30]    0128: E2 F8                                 loop loop2          ; cl sifir olana kadar donguyu tekrar et
+[  31]        :                                       
+[  32]    012A: BF 00 20                              mov di, 2000h       ; Bellek adresini basa al
+[  33]    012D: 8A 0E 4B 01                           mov cl, N           ; cl register'ina N yuklenir
+[  34]    0131: FE C1                                 inc cl              ; cl'i bir arttir
+[  35]        :                                       
+[  36]        :                                       ; Yazdirma fonksiyonu (print)
+[  37]    0133:                                       printbase:
+[  38]    0133: 8A 1D                                 mov bl, [di]        ; Bellekteki degeri bl register'ina al
+[  39]    0135: 8A F9                                 mov bh, cl          ; Yazdirma icin yuksek byte'i hazirla
+[  40]    0137: B1 08                                 mov cl, 8           ; 8 bit yazdirma icin sayac
+[  41]        :                                       
+[  42]    0139:                                       print:
+[  43]    0139: B4 02                                 mov ah, 2           ; BIOS yazdirma fonksiyonu
+[  44]    013B: B2 30                                 mov dl, '0'         ; dl'ye '0' karakterini yukle (baslangic olarak)
+[  45]    013D: F6 C3 80                              test bl, 10000000b  ; Ilk biti test et (bl'deki MSB bitini kontrol et)
+[  46]    0140: 74 02                                 jz zero             ; Eger sifir ise '0' yazdir
+[  47]    0142: B2 31                                 mov dl, '1'         ; Eger 1 ise '1' yazdir
+[  48]        :                                       
+[  49]    0144:                                       zero:
+[  50]    0144: CD 21                                 int 21h             ; Yazdirma islemini yap
+[  51]    0146: D0 E3                                 shl bl, 1           ; bl register'indeki biti sola kaydir (siradaki biti kontrol icin)
+[  52]    0148: E2 EF                                 loop print          ; cl sifir olana kadar yazdirmaya devam et
+[  53]        :                                       
+[  54]    014A: C3                                    ret                 ; Programin sonu, geri don
+[  55]        :                                       
+[  56]    014B: 05                                    N db 5              ; N degiskeni bellekte 5 olarak tanimlanir
+[  57]    014C: 03                                    M db 3              ; M degiskeni bellekte 3 olarak tanimlanir
+[  58]        :                                       
+[  59]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
