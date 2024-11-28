@@ -1,59 +1,42 @@
 name "Lab-01 -- Yahya Efe Kurucay - 22.10.2024"
 
-;db--> define byte ||| dw--> define word      
+org 100h
 
+mov ax, 2000h  ; Data segment baþlangýç adresi
+mov ds, ax     ; DS kaydýný ayarla
 
+mov cx, 5      ; Döngü sayýsý N = 5
+mov si, 0      ; Baþlangýç ofseti
+mov al, 1      ; Ýlk deðer 1
 
-org 100h            ; Program 100h adresinden baslar
+start:
+mov [2000h + si], al ; Belleðe AL'deki sayýyý yaz
+inc si               ; Bellek adresini artýr
+inc al               ; AL'deki sayýyý artýr
+loop start           ; Döngüyü tekrar et
 
-mov di, 2000h       ; di> destination index olarak 2000h ayarlanir
-mov cl, M           ; cl register'ina M degeri yuklenir
-mov ch, 0           ; ch register'i sifirlanir (kullanilmayacak)
-mov bx, 0           ; bx toplami tutacak ve basta sifir olarak ayarlanir
-mov dx, 1           ; dx register'ina 1 degeri yuklenir
+hlt
 
-loop1:              ; Dongu baslangici
-mov [di], dx        ; Bellege (di'nin isaret ettigi adres) dx'in degeri yazilir
-add bx, [di]        ; bx register'ina, di'nin gosterdigi adresteki deger eklenir
-inc di              ; di'yi bir arttir (bir sonraki bellege gec)
-inc dx              ; dx'i bir arttir
-loop loop1          ; cl sifir olana kadar donguyu tekrar et
-
-dec dx              ; dx'i bir azalt
-add dx, dx          ; dx'i kendisiyle topla (carpma etkisi)
-mov cl, N           ; cl register'ina N yuklenir
-sub cl, M           ; cl register'indan M cikarilir
-
-loop2:
-mov [di], dx        ; Bellekteki adrese dx'i yaz
-add bx, [di]        ; bx register'ina degeri ekle
-inc dx              ; dx'i bir arttir
-inc di              ; di'yi bir arttir (adres de ilerlesin)
-loop loop2          ; cl sifir olana kadar donguyu tekrar et
-
-mov di, 2000h       ; Bellek adresini basa al
-mov cl, N           ; cl register'ina N yuklenir
-inc cl              ; cl'i bir arttir
-
-; Yazdirma fonksiyonu (print)
-printbase:
-mov bl, [di]        ; Bellekteki degeri bl register'ina al
-mov bh, cl          ; Yazdirma icin yuksek byte'i hazirla
-mov cl, 8           ; 8 bit yazdirma icin sayac
-
-print:
-mov ah, 2           ; BIOS yazdirma fonksiyonu
-mov dl, '0'         ; dl'ye '0' karakterini yukle (baslangic olarak)
-test bl, 10000000b  ; Ilk biti test et (bl'deki MSB bitini kontrol et)
-jz zero             ; Eger sifir ise '0' yazdir
-mov dl, '1'         ; Eger 1 ise '1' yazdir
-
-zero:
-int 21h             ; Yazdirma islemini yap
-shl bl, 1           ; bl register'indeki biti sola kaydir (siradaki biti kontrol icin)
-loop print          ; cl sifir olana kadar yazdirmaya devam et
-
-ret                 ; Programin sonu, geri don
-
-N db 5              ; N degiskeni bellekte 5 olarak tanimlanir
-M db 3              ; M degiskeni bellekte 3 olarak tanimlanir
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
