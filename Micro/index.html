@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Code Snippets</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Code Snippets</h2>
+            <ul id="snippet-list">
+                <!-- Kod parçacıkları burada listelenecek -->
+            </ul>
+        </div>
+        <div class="main">
+            <div id="snippet-preview">
+                <h2 id="snippet-title"></h2>
+                <pre><code id="snippet-code"></code></pre>
+            </div>
+        </div>
+        <div class="chatbot">
+            <h2>Chatbot</h2>
+            <div id="chatbox">
+                <div id="chat-content"></div>
+                <input type="text" id="user-input" placeholder="Type your message...">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <div class="code-container">
+                <pre><code id="modalCode"></code></pre>
+                <button id="copyButton">Copy Code</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kod parçacıkları burada saklanacak -->
+    <div id="snippets" style="display: none;">
+        <div class="snippet" data-id="1" data-title="Assembly Prime Number Check">
+            <pre><code>org 100h
+
+mov cx, N
+sub cx, 2
+mov bx, 2
+
+myFunction:
+  xor dx, dx
+  mov ax, N
+  div bx
+  cmp dx, 0
+  je and
+  inc bx
+  loop myFunction
+
+mov ah, 2
+mov dl, '1'
+int 21h
+ret
+
+and:
+  mov isPrime, 0
+  mov ah, 2
+  mov dl, '0'
+  int 21h
+  ret
+
+N dw 5
+isPrime dw 1</code></pre>
+        </div>
+        <div class="snippet" data-id="2" data-title="Assembly Multiplication Program">
+            <pre><code>org 100h
+
+mov ah, 9
+lea dx, mesaj
+int 21h
+
+mov ah, 1
+int 21h
+sub al, 30h
+
+mov ah, 9
+lea dx, mesaj2
+int 21h
+
+mov ah, 1
+int 21h
+sub al, 30h
+
+mov bl, al 
+mov al, cl
+mul bl
+
+mov ah, 9
+lea dx, mesaj3
+int 21h
+
+mov ah, 2
+mov dl, al
+add dl, 30h
+int 21h
+
+end21:
+  mov ah, 4ch
+  int 21h
+
+mesaj db 'Birinci sayiyi giriniz: $'
+mesaj2 db 'Ikinci sayiyi giriniz: $'
+mesaj3 db 'Sonuc : $'</code></pre>
+        </div>
+        <div class="snippet" data-id="3" data-title="Assembly GCD Calculator">
+            <pre><code>org 100h
+
+mov ax, num1
+mov bx, num2
+
+mainFunc:
+  mov cx, ax 
+  cmp cx, bx
+  je swap
+
+swap:
+  mov bp, ax
+  mov ax, bx
+  mov bx, bp
+
+mainFunc:
+  xor dx, dx
+  div bx
+  cmp dx, 0
+  je end
+  mov ax, bx
+  mov bx, dx
+  loop mainFunc
+
+end:
+  mov gcd, bx
+  ret 
+
+num1 dw 36
+num2 dw 48
+gcd dw ?</code></pre>
+        </div>
+        <div class="snippet" data-id="4" data-title="Assembly Fibonacci Array Generator">
+            <pre><code>org 100h
+
+mov cx, N
+sub cx, 2 ; (sayıyı kontrol ediyorum bir eksiği yok burada)
+cmp cl, 15
+jo error
+
+cmp cl, 25
+jo error
+
+mov array[1], 1
+inc di
+mov bl, boleni_koy ; (burası önemli bir yer boleni belirliyoruz)
+
+array_fill:
+  mov ah, array[si-1] ; (ilkini alıyoruz)
+  add ah, array[si-2] ; (ikinci elemanı ekliyoruz)
+  mov array[si], ah ; (işlem sonuçlarını koyduk)
+
+  inc si
+  cmp cl, 0
+  js end
+loop array_fill
+
+mov ah, array[si-1] ; (ilkini alıyoruz)
+sub ah, array[si-2] ; (ikinci elemanı çıkarıyoruz)
+mov array[si], ah ; (işlem sonuçlarını koyduk)
+
+inc si
+cmp cl, 0
+js end
+loop array_fill
+
+; (error burayla da işin yok)
+
+error:
+  lea dx, MESSAGE
+  mov ah, 9
+  int 21h
+
+end:
+  ret
+
+N db 16
+array DB N dup(?)
+MESSAGE DB "Please enter a value between 14 and 26$"</code></pre>
+        </div>
+        <div class="snippet" data-id="5" data-title="Assembly Array Operations">
+            <pre><code>org 100h
+
+mov ax, 2
+mov bx, 1
+mov cx, 1
+
+print:
+  mov dx, ax
+  add dx, bx
+  mov toplam, dx
+
+  mov ah, 2
+  mov dl, al
+  add dl, 30h
+  int 21h
+
+  mov ah, 2
+  mov dl, 10
+  int 21h
+
+  mov ah, 2
+  mov dl, 13
+  int 21h
+
+next:
+  mov al, toplam
+  mov bl, array[si]
+  mul bl
+
+  mov ah, 2
+  mov dl, al
+  add dl, 30h
+  int 21h
+
+  mov ah, 2
+  mov dl, 10
+  int 21h
+
+  mov ah, 2
+  mov dl, 13
+  int 21h
+
+  add si, 2
+  add cx, 1
+  cmp cx, 5
+  jle next
+
+end:
+  mov ah, 4ch
+  int 21h
+
+array dw 1, 2, 3, 4</code></pre>
+        </div>
+        <div class="snippet" data-id="6" data-title="Assembly Palindrome Checker">
+            <pre><code>mov [di],si
+inc di
+jmp next
+
+LINEEND:
+mov al,'$'
+mov [di],al
+dec di
+mov bx,di
+
+CALCULATEPALINDROME:
+cmp si,di
+je PALINDROME
+cmp bx,di
+je PALINDROME
+mov al,[si]
+cmp al,[di]
+jne NOTPALINDROME
+inc si
+dec di
+jmp CALCULATEPALINDROME
+
+PALINDROME:
+lea dx,msg3
+mov ah,09h
+int 21h
+jmp END
+
+END:
+ret
+
+arr db 50 DUP (0)
+msg db 10,"Please Enter an Input:$"
+msg2 db 13,10,"It's Not Palindrome! $"
+msg3 db 16,10,"It's Palindrome! $"</code></pre>
+        </div>
+        <div class="snippet" data-id="7" data-title="Assembly Shakespeare Palindrome">
+            <pre><code>org 100h
+
+PALINDROME:
+lea dx,msg1
+mov ah,09h
+int 21h
+
+lea dx,msg2
+mov ah,09h
+int 21h
+
+lea si,string1
+lea di,string1
+
+end_finder:
+mov al,'$'
+cmp al,[di]
+je something
+inc di
+jmp end_finder
+
+something:
+dec di
+mov al,[si]
+cmp al,[di]
+jne not_pali
+inc si
+cmp si,di
+jle something
+jmp pali
+
+not_pali:
+lea dx,msg2
+mov ah,09h
+int 21h
+jmp end
+
+pali:
+lea dx,msg1
+mov ah,09h
+int 21h
+
+end:
+ret
+
+msg1 db 10,'To be $'
+msg2 db 10,13,'Not to be $'
+string1 db 'racecar$'</code></pre>
+        </div>
+        <div class="snippet" data-id="8" data-title="Assembly Perfect Square Check">
+            <pre><code>org 100h
+
+mov cx,N
+mov bx,2
+
+mainFunc:
+mov bp,N
+mov ax,bx
+mul bx
+cmp ax,bp
+je setTrue
+jg end
+inc bx
+loop mainFunc
+
+setTrue:
+mov isSquare, 1
+jmp end
+
+end:
+ret
+
+N dw 5
+isSquare dw 0</code></pre>
+        </div>
+        <div class="snippet" data-id="9" data-title="Assembly Shift Memory">
+            <pre><code>org 100h  ;SHIFT MEMORY
+mov si,2000h
+mov di,2004h
+mov cx,2
+
+mainFunc:
+mov ax,[si]
+mov bx,[di]
+mov [si],bx
+mov [di],ax
+add si,2
+add di,2
+loop mainFunc
+
+ret</code></pre>
+        </div>
+        <div class="snippet" data-id="10" data-title="Assembly Fibonacci Sequence">
+            <pre><code>org 100h  ; Program baslangici
+
+mov cx, 10     ; Fibonacci dizisinde yazilacak eleman sayisi (ornek: 10)
+mov ax, 0      ; ilk Fibonacci sayisi: F(0) = 0
+mov bx, 1      ; ikinci Fibonacci sayisi F(1) = 1
+
+; Bellekte sonuclari saklamak icin baslangic adresi belirleme
+mov di, 2000h  ; Fibonacci dizisi 2000h adresine yazilacak
+
+; İlk iki sayiyi bellege yaz
+mov [di], ax   ; F(0) = 0
+add di, 2      ; Bir sonraki bellek adresine gec
+mov [di], bx   ; F(1) = 1
+add di, 2      ; Bir sonraki bellek adresine gec
+
+; Fibonacci Hesaplama Dongusu
+fib_loop:
+dec cx         ; cx = cx - 1, eleman sayisini azalt
+jz done        ; cx 0 olursa islemi bitir
+
+; Fibonacci hesaplama: Fn = F(n-1) + F(n-2)
+mov dx, ax     ; dx = F(n-2)
+add ax, bx     ; ax = F(n-1) + F(n-2)
+mov bx, dx     ; bx = eski F(n-1)
+
+; Yeni Fibonacci sayisini bellege yaz
+mov [di], ax   ; Bellege Fibonacci sayisini yaz
+add di, 2      ; Bellekte bir sonraki adrese gec
+jmp fib_loop   ; Donguyu tekrar baslat
+
+done:
+int 20h        ; Program bitir</code></pre>
+        </div>
+        <div class="snippet" data-id="11" data-title="Assembly Fibonacci Calculator">
+            <pre><code>org 100h
+
+cmp N,0
+je setZero
+cmp N,1
+je setOne
+mov cx,N
+mov ax,1
+mov bx,0
+
+mainFunc:
+mov dx,ax
+add dx,bx
+mov bx,dx
+loop mainFunc
+
+mov Fibonacci,ax
+jmp end
+
+setZero:
+mov Fibonacci,0
+jmp end
+
+setOne:
+mov Fibonacci,1
+jmp end
+
+end:
+ret
+
+N dw 6
+Fibonacci dw ?</code></pre>
+        </div>
+        <div class="snippet" data-id="12" data-title="Assembly Reverse String">
+            <pre><code>org 100h    ;REVERSE3
+
+START:      NEXT:
+lea dx,msg
+mov ah,09h  
+int 21h 
+    
+lea si, arr
+lea di, arr
+mov ah, 01h
+
+LINEEND:
+mov al,'$'
+mov [di],al
+mov bx,si
+
+SETSI:
+mov si,bx
+xor ax,ax
+jmp POPFROMSTACK
+
+PUSHTOSTACK:
+cmp si,di
+je SETSI
+push [si]
+inc si
+jmp PUSHTOSTACK
+
+POPFROMSTACK:     PRINT:
+cmp si,di         mov dh, 1
+je PRINT          mov dl, 1
+pop ax            mov bh, 0
+mov [si],ax       mov ah, 2
+inc si            int 10h
+jmp POPFROMSTACK  mov [di],'$'
+                  lea dx, arr
+                  mov ah, 09
+                  int 21h
+                  ret
+
+msg db "Please write a word: $"
+arr db 50 dup (0)</code></pre>
+        </div>
+        <div class="snippet" data-id="13" data-title="Assembly Factorial Calculation">
+            <pre><code>org 100h
+
+mov cx, factorial
+mov bx,factorial
+mov ax,1
+
+factorial:
+mul bx
+dec bx
+loop factorial
+ret
+
+factorial dw 5</code></pre>
+        </div>
+        <div class="snippet" data-id="14" data-title="Assembly Memory Initialization and Summation">
+            <pre><code>org 100h                    ; Program starting address
+
+; Initialization
+mov ax, 2000h              ; Data segment address
+mov ds, ax                 ; Set DS to 2000h
+
+mov N, 5                   ; Initialize N = 5 (can be changed during the lab)
+mov M, 3                   ; Initialize M = 3 (can be changed during the lab)
+
+; Memory Initialization Loop
+mov cx, N                  ; CX = N, counter for memory initialization
+mov di, 0                  ; Offset (starts at DS:[2000h])
+mov al, 1                  ; AL = starting value (1)
+
+init_loop:
+    mov [di], al          ; Store AL at DS:[2000h + di]
+    inc al                ; Increment AL (next integer)
+    inc di                ; Move to the next memory address
+    loop init_loop        ; Repeat until CX = 0
+
+; Double N After M Iterations
+mov cx, M                  ; CX = M, counter for doubling
+double_loop:
+    loop double_loop      ; Wait for M iterations
+    shl N, 1              ; Double N (N = N * 2)
+
+; Summation Loop
+mov cx, N                  ; CX = N, counter for summation
+mov di, 0                  ; Offset for DS:[2000h]
+xor ax, ax                ; Clear AX (sum accumulator)
+
+sum_loop:
+    add al, [di]          ; Add value at DS:[2000h + di] to AL
+    inc di                ; Move to the next memory address
+    loop sum_loop         ; Repeat until CX = 0
+
+mov [di], ax              ; Store sum at DS:[2000h + N]
+
+; Print Values (Bonus)
+mov cx, N                  ; CX = N, counter for printing
+mov di, 0                  ; Offset for DS:[2000h]
+call print_values         ; Call print function to display values
+
+; Terminate Program
+mov ah, 4Ch
+int 21h
+
+; Print Function
+print_values:
+    mov ah, 2
+print_loop:
+    mov dl, [di]          ; Load value from memory into DL
+    int 21h               ; Print DL
+    inc di                ; Move to the next memory address
+    loop print_loop       ; Repeat until CX = 0
+    ret                   ; Return to caller
+
+N db 0                    ; Define N variable
+M db 0                    ; Define M variable</code></pre>
+        </div>
+        <div class="snippet" data-id="15" data-title="Assembly String Sorting Check">
+            <pre><code>org 100h
+
+lea si,string
+mov al,'$'
+
+main_process:
+cmp [si],al
+je sorted
+mov bl,[si]
+inc si
+cmp [si], al              ; Son karakterden sonra mı?
+je sorted
+cmp bl,[si]
+jg not_sorted
+jmp main_process
+
+sorted:
+    lea dx,ms2
+    mov ah,09h
+    int 21h
+    jmp end
+
+not_sorted:
+    lea dx,ms1
+    mov ah,09h
+    int 21h
+
+end:
+    ret
+
+string db 'abcd$'
+ms1 db 'not sorted$'
+ms2 db 'sorted$'</code></pre>
+        </div>
+        <div class="snippet" data-id="16" data-title="Örnek Kod 1">
+            <pre><code>console.log('Merhaba Dünya');</code></pre>
+        </div>
+        <div class="snippet" data-id="17" data-title="Örnek Kod 2">
+            <pre><code>function selamla(isim) {
+    return `Merhaba, ${isim}`;
+}</code></pre>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

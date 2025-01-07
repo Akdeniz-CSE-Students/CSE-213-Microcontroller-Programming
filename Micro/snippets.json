@@ -1,0 +1,87 @@
+{
+  "snippets": [
+    {
+      "id": 1,
+      "title": "Assembly Prime Number Check",
+      "code": "org 100h\n\nmov cx, N\nsub cx, 2\nmov bx, 2\n\nmyFunction:\n  xor dx, dx\n  mov ax, N\n  div bx\n  cmp dx, 0\n  je and\n  inc bx\n  loop myFunction\n\nmov ah, 2\nmov dl, '1'\nint 21h\nret\n\nand:\n  mov isPrime, 0\n  mov ah, 2\n  mov dl, '0'\n  int 21h\n  ret\n\nN dw 5\nisPrime dw 1"
+    },
+    {
+      "id": 2,
+      "title": "Assembly Multiplication Program",
+      "code": "org 100h\n\nmov ah, 9\nlea dx, mesaj\nint 21h\n\nmov ah, 1\nint 21h\nsub al, 30h\n\nmov ah, 9\nlea dx, mesaj2\nint 21h\n\nmov ah, 1\nint 21h\nsub al, 30h\n\nmov bl, al \nmov al, cl\nmul bl\n\nmov ah, 9\nlea dx, mesaj3\nint 21h\n\nmov ah, 2\nmov dl, al\nadd dl, 30h\nint 21h\n\nend21:\n  mov ah, 4ch\n  int 21h\n\nmesaj db 'Birinci sayiyi giriniz: $'\nmesaj2 db 'Ikinci sayiyi giriniz: $'\nmesaj3 db 'Sonuc : $'"
+    },
+    {
+      "id": 3,
+      "title": "Assembly GCD Calculator",
+      "code": "org 100h\n\nmov ax, num1\nmov bx, num2\n\nmainFunc:\n  mov cx, ax \n  cmp cx, bx\n  je swap\n\nswap:\n  mov bp, ax\n  mov ax, bx\n  mov bx, bp\n\nmainFunc:\n  xor dx, dx\n  div bx\n  cmp dx, 0\n  je end\n  mov ax, bx\n  mov bx, dx\n  loop mainFunc\n\nend:\n  mov gcd, bx\n  ret \n\nnum1 dw 36\nnum2 dw 48\ngcd dw ?"
+    },
+    {
+      "id": 4,
+      "title": "Assembly Fibonacci Array Generator",
+      "code": "org 100h\n\nmov cx, N\nsub cx, 2 ; (sayıyı kontrol ediyorum bir eksiği yok burada)\ncmp cl, 15\njo error\n\ncmp cl, 25\njo error\n\nmov array[1], 1\ninc di\nmov bl, boleni_koy ; (burası önemli bir yer boleni belirliyoruz)\n\narray_fill:\n  mov ah, array[si-1] ; (ilkini alıyoruz)\n  add ah, array[si-2] ; (ikinci elemanı ekliyoruz)\n  mov array[si], ah ; (işlem sonuçlarını koyduk)\n\n  inc si\n  cmp cl, 0\n  js end\nloop array_fill\n\nmov ah, array[si-1] ; (ilkini alıyoruz)\nsub ah, array[si-2] ; (ikinci elemanı çıkarıyoruz)\nmov array[si], ah ; (işlem sonuçlarını koyduk)\n\ninc si\ncmp cl, 0\njs end\nloop array_fill\n\n; (error burayla da işin yok)\n\nerror:\n  lea dx, MESSAGE\n  mov ah, 9\n  int 21h\n\nend:\n  ret\n\nN db 16\narray DB N dup(?)\nMESSAGE DB \"Please enter a value between 14 and 26$\""
+    },
+    {
+      "id": 5,
+      "title": "Assembly Array Operations",
+      "code": "org 100h\n\nmov ax, 2\nmov bx, 1\nmov cx, 1\n\nprint:\n  mov dx, ax\n  add dx, bx\n  mov toplam, dx\n\n  mov ah, 2\n  mov dl, al\n  add dl, 30h\n  int 21h\n\n  mov ah, 2\n  mov dl, 10\n  int 21h\n\n  mov ah, 2\n  mov dl, 13\n  int 21h\n\nnext:\n  mov al, toplam\n  mov bl, array[si]\n  mul bl\n\n  mov ah, 2\n  mov dl, al\n  add dl, 30h\n  int 21h\n\n  mov ah, 2\n  mov dl, 10\n  int 21h\n\n  mov ah, 2\n  mov dl, 13\n  int 21h\n\n  add si, 2\n  add cx, 1\n  cmp cx, 5\n  jle next\n\nend:\n  mov ah, 4ch\n  int 21h\n\narray dw 1, 2, 3, 4"
+    },
+    {
+      "id": 6,
+      "title": "Assembly Palindrome Checker",
+      "code": "mov [di],si\ninc di\njmp next\n\nLINEEND:\nmov al,'$'\nmov [di],al\ndec di\nmov bx,di\n\nCALCULATEPALINDROME:\ncmp si,di\nje PALINDROME\ncmp bx,di\nje PALINDROME\nmov al,[si]\ncmp al,[di]\njne NOTPALINDROME\ninc si\ndec di\njmp CALCULATEPALINDROME\n\nPALINDROME:\nlea dx,msg3\nmov ah,09h\nint 21h\njmp END\n\nEND:\nret\n\narr db 50 DUP (0)\nmsg db 10,\"Please Enter an Input:$\"\nmsg2 db 13,10,\"It's Not Palindrome! $\"\nmsg3 db 16,10,\"It's Palindrome! $\""
+    },
+    {
+      "id": 7,
+      "title": "Assembly Shakespeare Palindrome",
+      "code": "org 100h\n\nPALINDROME:\nlea dx,msg1\nmov ah,09h\nint 21h\n\nlea dx,msg2\nmov ah,09h\nint 21h\n\nlea si,string1\nlea di,string1\n\nend_finder:\nmov al,'$'\ncmp al,[di]\nje something\ninc di\njmp end_finder\n\nsomething:\ndec di\nmov al,[si]\ncmp al,[di]\njne not_pali\ninc si\ncmp si,di\njle something\njmp pali\n\nnot_pali:\nlea dx,msg2\nmov ah,09h\nint 21h\njmp end\n\npali:\nlea dx,msg1\nmov ah,09h\nint 21h\n\nend:\nret\n\nmsg1 db 10,'To be $'\nmsg2 db 10,13,'Not to be $'\nstring1 db 'racecar$'"
+    },
+    {
+      "id": 8,
+      "title": "Assembly Perfect Square Check",
+      "code": "org 100h\n\nmov cx,N\nmov bx,2\n\nmainFunc:\nmov bp,N\nmov ax,bx\nmul bx\ncmp ax,bp\nje setTrue\njg end\ninc bx\nloop mainFunc\n\nsetTrue:\nmov isSquare, 1\njmp end\n\nend:\nret\n\nN dw 5\nisSquare dw 0"
+    },
+    {
+      "id": 9,
+      "title": "Assembly Shift Memory",
+      "code": "org 100h  ;SHIFT MEMORY\nmov si,2000h\nmov di,2004h\nmov cx,2\n\nmainFunc:\nmov ax,[si]\nmov bx,[di]\nmov [si],bx\nmov [di],ax\nadd si,2\nadd di,2\nloop mainFunc\n\nret"
+    },
+    {
+      "id": 10,
+      "title": "Assembly Fibonacci Sequence",
+      "code": "org 100h  ; Program baslangici\n\nmov cx, 10     ; Fibonacci dizisinde yazilacak eleman sayisi (ornek: 10)\nmov ax, 0      ; ilk Fibonacci sayisi: F(0) = 0\nmov bx, 1      ; ikinci Fibonacci sayisi F(1) = 1\n\n; Bellekte sonuclari saklamak icin baslangic adresi belirleme\nmov di, 2000h  ; Fibonacci dizisi 2000h adresine yazilacak\n\n; İlk iki sayiyi bellege yaz\nmov [di], ax   ; F(0) = 0\nadd di, 2      ; Bir sonraki bellek adresine gec\nmov [di], bx   ; F(1) = 1\nadd di, 2      ; Bir sonraki bellek adresine gec\n\n; Fibonacci Hesaplama Dongusu\nfib_loop:\ndec cx         ; cx = cx - 1, eleman sayisini azalt\njz done        ; cx 0 olursa islemi bitir\n\n; Fibonacci hesaplama: Fn = F(n-1) + F(n-2)\nmov dx, ax     ; dx = F(n-2)\nadd ax, bx     ; ax = F(n-1) + F(n-2)\nmov bx, dx     ; bx = eski F(n-1)\n\n; Yeni Fibonacci sayisini bellege yaz\nmov [di], ax   ; Bellege Fibonacci sayisini yaz\nadd di, 2      ; Bellekte bir sonraki adrese gec\njmp fib_loop   ; Donguyu tekrar baslat\n\ndone:\nint 20h        ; Program bitir"
+    },
+    {
+      "id": 11,
+      "title": "Assembly Fibonacci Calculator",
+      "code": "org 100h\n\ncmp N,0\nje setZero\ncmp N,1\nje setOne\nmov cx,N\nmov ax,1\nmov bx,0\n\nmainFunc:\nmov dx,ax\nadd dx,bx\nmov bx,dx\nloop mainFunc\n\nmov Fibonacci,ax\njmp end\n\nsetZero:\nmov Fibonacci,0\njmp end\n\nsetOne:\nmov Fibonacci,1\njmp end\n\nend:\nret\n\nN dw 6\nFibonacci dw ?"
+    },
+    {
+      "id": 12,
+      "title": "Assembly Reverse String",
+      "code": "org 100h    ;REVERSE3\n\nSTART:      NEXT:\nlea dx,msg\nmov ah,09h  \nint 21h \n    \nlea si, arr\nlea di, arr\nmov ah, 01h\n\nLINEEND:\nmov al,'$'\nmov [di],al\nmov bx,si\n\nSETSI:\nmov si,bx\nxor ax,ax\njmp POPFROMSTACK\n\nPUSHTOSTACK:\ncmp si,di\nje SETSI\npush [si]\ninc si\njmp PUSHTOSTACK\n\nPOPFROMSTACK:     PRINT:\ncmp si,di         mov dh, 1\nje PRINT          mov dl, 1\npop ax            mov bh, 0\nmov [si],ax       mov ah, 2\ninc si            int 10h\njmp POPFROMSTACK  mov [di],'$'\n                  lea dx, arr\n                  mov ah, 09\n                  int 21h\n                  ret\n\nmsg db \"Please write a word: $\"\narr db 50 dup (0)"
+    },
+    {
+      "id": 13,
+      "title": "Assembly Factorial Calculation",
+      "code": "org 100h\n\nmov cx, factorial\nmov bx,factorial\nmov ax,1\n\nfactorial:\nmul bx\ndec bx\nloop factorial\nret\n\nfactorial dw 5"
+    },
+    {
+      "id": 14,
+      "title": "Assembly Memory Initialization and Summation",
+      "code": "org 100h                    ; Program starting address\n\n; Initialization\nmov ax, 2000h              ; Data segment address\nmov ds, ax                 ; Set DS to 2000h\n\nmov N, 5                   ; Initialize N = 5 (can be changed during the lab)\nmov M, 3                   ; Initialize M = 3 (can be changed during the lab)\n\n; Memory Initialization Loop\nmov cx, N                  ; CX = N, counter for memory initialization\nmov di, 0                  ; Offset (starts at DS:[2000h])\nmov al, 1                  ; AL = starting value (1)\n\ninit_loop:\n    mov [di], al          ; Store AL at DS:[2000h + di]\n    inc al                ; Increment AL (next integer)\n    inc di                ; Move to the next memory address\n    loop init_loop        ; Repeat until CX = 0\n\n; Double N After M Iterations\nmov cx, M                  ; CX = M, counter for doubling\ndouble_loop:\n    loop double_loop      ; Wait for M iterations\n    shl N, 1              ; Double N (N = N * 2)\n\n; Summation Loop\nmov cx, N                  ; CX = N, counter for summation\nmov di, 0                  ; Offset for DS:[2000h]\nxor ax, ax                ; Clear AX (sum accumulator)\n\nsum_loop:\n    add al, [di]          ; Add value at DS:[2000h + di] to AL\n    inc di                ; Move to the next memory address\n    loop sum_loop         ; Repeat until CX = 0\n\nmov [di], ax              ; Store sum at DS:[2000h + N]\n\n; Print Values (Bonus)\nmov cx, N                  ; CX = N, counter for printing\nmov di, 0                  ; Offset for DS:[2000h]\ncall print_values         ; Call print function to display values\n\n; Terminate Program\nmov ah, 4Ch\nint 21h\n\n; Print Function\nprint_values:\n    mov ah, 2\nprint_loop:\n    mov dl, [di]          ; Load value from memory into DL\n    int 21h               ; Print DL\n    inc di                ; Move to the next memory address\n    loop print_loop       ; Repeat until CX = 0\n    ret                   ; Return to caller\n\nN db 0                    ; Define N variable\nM db 0                    ; Define M variable"
+    },
+    {
+      "id": 15,
+      "title": "Assembly String Sorting Check",
+      "code": "org 100h\n\nlea si,string\nmov al,'$'\n\nmain_process:\ncmp [si],al\nje sorted\nmov bl,[si]\ninc si\ncmp [si], al              ; Son karakterden sonra mı?\nje sorted\ncmp bl,[si]\njg not_sorted\njmp main_process\n\nsorted:\n    lea dx,ms2\n    mov ah,09h\n    int 21h\n    jmp end\n\nnot_sorted:\n    lea dx,ms1\n    mov ah,09h\n    int 21h\n\nend:\n    ret\n\nstring db 'abcd$'\nms1 db 'not sorted$'\nms2 db 'sorted$'"
+    },
+    {
+        "title": "Örnek Kod 1",
+        "code": "console.log('Merhaba Dünya');"
+    },
+    {
+        "title": "Örnek Kod 2",
+        "code": "function selamla(isim) {\n    return `Merhaba, ${isim}`;\n}"
+    }
+  ]
+}
